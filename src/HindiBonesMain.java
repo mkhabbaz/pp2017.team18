@@ -1,3 +1,4 @@
+import client.engine.ClientEngine;
 import gui.HindiBones;
 
 public class HindiBonesMain {
@@ -8,5 +9,10 @@ public class HindiBonesMain {
 	public static void main(String[] args){
 		
 		new HindiBones(BOX*WIDTH, BOX*HEIGHT, "Hindi Bones");
+
+		ClientEngine cEngine = new ClientEngine();
+		cEngine.chatte("<#godmode");
+		cEngine.chatte("Hallo");
+		System.out.println("Hallo Test");
 	}
 }
