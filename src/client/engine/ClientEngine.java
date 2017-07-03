@@ -44,12 +44,14 @@ public class ClientEngine extends Thread {
 	 * @param empfangenesPaket: Von Server empfangenes Paket, welches jetzt je nach Typ verarbeitet wird
 	 */
 
-	public void nachrichtentypZuordnen(Paket empfangenesPaket) {
-		NachrichtMain empfangeneNachricht = empfangenesPaket.getNachricht();
-		switch (empfangeneNachricht.getNachrichtentyp()) {             //Switch-Case Anweisung wird zur Unterscheidung eingehender Nachrichten verwendet
-			case 0://LOGIN
+	public void nachrichtentypZuordnen(String empfangenerString) {
+
+		switch (nachrichtenVerarbeitung()) {             //Switch-Case Anweisung wird zur Unterscheidung eingehender Nachrichten verwendet
+			case 0:
+				//LOGIN
 				if (eingeloggt = true) {
 					LoginAntwort daten = new LoginAntwort(true) ; //eingehendeNachricht
+					//Level, Levelzaehler ist noch nicht vorhanden
 					spielflaeche.level = daten.karte;
 					spielflaeche.levelzaehler = daten.levelzaehler;
 					spieler.setName(daten.name);
@@ -80,17 +82,17 @@ public class ClientEngine extends Thread {
 				break;
 			case 3:
 				//
-				testInstanz.gibAntwortWeiter("Schluessel an" + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
+				testInstanz.serverAntwort("Schluessel an" + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
 						+ " wurde aufgenommen");
 				break;
 			case 4:
 				//
-				systemnachricht("Das Level wurde abgeschlossen!");
+				testInstanz.serverAntwort("Das Level wurde abgeschlossen!");
 
 				break;
 			case 5:
 				//
-				systemnachricht(empfangeneNachricht.fehler);
+				testInstanz.serverAntwort(empfangeneNachricht.fehler);
 				break;
 			case 6:
 				verarbeiteCheat(empfangeneNachricht);
@@ -127,19 +129,34 @@ public class ClientEngine extends Thread {
 	}
 
 
-
     /**
      * Methode levelAnfordern: Empfaengt die Serverdaten des Levels
      * @author Pilz, Konstantin, 5957451
      *
      */
     public void levelAnfordern(){
+
         Paket serverAntwort = sende(new LevelAendern());  //diese Nachricht muss noch in shared erstellt werden
         nachrichtentypZuordnen(serverAntwort);  //mit dieser Methode aus ClienEngine wird der Antwort ein Nachrichtentyp
 												// zugeordnet
         currentLevel = alleLevel[0];  //hier wird das aktuelle Level als Startlevel gesetzt
 
 		testInstanz.serverAntwort();
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     }
 
     /**
@@ -168,7 +185,6 @@ public class ClientEngine extends Thread {
     	spieler = fenster.spieler;
     	spieler.nimmSchluessel();
 
-
 		int posX = spieler.getXPos();
 		int posY = spieler.getYPos();
 		int itemIDlocal = 1;
@@ -181,13 +197,16 @@ public class ClientEngine extends Thread {
 	 * @author Pilz, Konstantin, 5957451
 	 * Methode aus gui-Komponente uebernommen
      */
-	public void benutzeHeiltrank(){
+	public void benutzeHeiltrank() {
 		int change = spieler.benutzeHeiltrank();
+
 		// Heilungseffekt wird verbessert, falls neue Monster durch das Aufheben des Schluessels ausgeloest wurden
-		if (spieler.hatSchluessel())
+		if (spieler.hatSchluessel()) {
 			spieler.changeHealth((int)(change*1.5));
-		else
-			spieler.changeHealth((int)(change*0.5));
+		}
+		else {
+			spieler.changeHealth((int) (change * 0.5));
+		}
 	}
 
 
@@ -198,9 +217,15 @@ public class ClientEngine extends Thread {
      */
     public void verwendeSchluessel(){
     	spieler = fenster.spieler;
-    	if(spieler.hatSchluessel()) {  //schluesselAufgenommen muss noch in shared.Spieler erstellt werden
-			aktuellesLevel.setLevelInhalt(spieler.getXPos(), spieler.getYPos(), 1);  //1 = neuer Inhalt des des zu veraendernden Ortes
-			spieler.entferneSchluessel();  //Schluessel geht nach Gebrauch verloren
+
+    	if(spieler.hatSchluessel()) {
+
+    		//Spieler muss nach Schluesselgebrauch ins nächste Level gebracht werden
+			//aktuellesLevel.setLevelInhalt(spieler.getXPos(), spieler.getYPos(), 1);
+			// neuer Inhalt des des zu veraendernden Ortes hier einfügen
+
+			//Schluessel geht nach Gebrauch verloren
+			spieler.entferneSchluessel();
 		}
 	}
 
@@ -210,10 +235,10 @@ public class ClientEngine extends Thread {
 	 * @return
 	 */
 	public boolean chatte(String nachricht) {
-		boolean cheat = verarbeiteCheat(nachricht)
+		boolean cheat = verarbeiteCheat(nachricht);
 
 		if (cheat == false) {
-			testInstanz.serverAntwort();
+			testInstanz.serverAntwort(nachricht);
 		}
 	}
 
@@ -246,7 +271,7 @@ public class ClientEngine extends Thread {
 	 * @param eingehendeNachricht
 	 * @throws Exception
 	 */
-	void nachrichtenVerarbeitung(NachrichtMain eingehendeNachricht)
+	public int nachrichtenVerarbeitung(String eingehendeNachricht)
 			throws Exception {
 		// Login
 		if (eingehendeNachricht instanceof LoginAntwort) {

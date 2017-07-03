@@ -60,6 +60,8 @@ public class TestumgebungClientEngine {
                 //LevelAendern
                 nachrichtenBotschaft = "LevelAendern: " + nachrichtenInhalt;
 
+                //nachrichtenInhalt und Typ muessen zum Server weitergegeben werden
+
                 break;
 
             case 4:
