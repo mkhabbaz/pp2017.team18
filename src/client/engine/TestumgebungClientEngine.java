@@ -41,7 +41,7 @@ public class TestumgebungClientEngine {
         switch (nachrichtenTyp) {
             case 0:
                 //Fehlernachricht, uebergibt Fehlermeldung als Text
-                nachrichtenBotschaft = "Fehlernachricht, übergibt Fehlermeldung als Text";
+                nachrichtenBotschaft = "Fehlernachricht, übergibt Fehlermeldung als Text" + nachrichtenInhalt;
 
                 break;
 
@@ -53,7 +53,7 @@ public class TestumgebungClientEngine {
 
             case 2:
                 //Antwort: Gibt Boolean-Werte auf Anfragen zurueck
-                nachrichtenBotschaft = "Antwort: Gibt Boolean-Werte auf Anfragen zurueck";
+                nachrichtenBotschaft = "Antwort: Gibt Boolean-Werte auf Anfragen zurueck" + nachrichtenInhalt;
 
                 break;
 
@@ -75,13 +75,8 @@ public class TestumgebungClientEngine {
                 //SpielerBewegung
                 nachrichtenBotschaft = "SpielerBewegung: " + nachrichtenInhalt;
 
-                break;;
-
-            case 6:
-                //
-                nachrichtenBotschaft = "";
-
                 break;
+
         }
         System.out.println(nachrichtenBotschaft);
     }
@@ -105,56 +100,6 @@ public class TestumgebungClientEngine {
     }
 
 
-    public void spielerBewegung(int richtung) {
-        spieler = fenster.spieler;
-        switch (richtung) {
-            case 0:
-			/*
-			 * Testet, ob eine Bewegung in die angegebene Richtung moeglich ist.
-			 * Fuehrt die Bewegung aus und sendet eine entsprechende Nachricht
-			 * an den Server
-			 */
-                if (spieler.getYPos() < aktuellesLevel.getLaengeY() - 1
-                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() + 1) != 0) {
-                    spieler.runter();
-                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
-                }
-                break;
 
-            case 1:
-			/*
-			 * Analog zu case 0
-			 */
-                if (spieler.getYPos() > 0
-                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() - 1) != 0) {
-                    spieler.hoch();
-                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
-                }
-                break;
-
-            case 2:
-			/*
-			 * Analog zu case 0
-			 */
-                if (spieler.getXPos() > 0
-                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() - 1, spieler.getYPos()) != 0) {
-                    spieler.links();
-                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
-                }
-                break;
-
-            case 3:
-			/*
-			 * Analog zu case 0
-			 */
-                if (spieler.getXPos() < aktuellesLevel.getLaengeX() - 1
-                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() + 1, spieler.getYPos()) != 0) {
-                    spieler.rechts();
-                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
-                }
-                break;
-
-        }
-    }
 
 }

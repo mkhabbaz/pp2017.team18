@@ -25,14 +25,16 @@ import gui.*;
 
 public class ClientEngine extends Thread {
 
-	public Spielflaeche spielflaeche = new Spielflaeche();
+	HindiBones fenster = new HindiBones(16, 16, "Level1");
+	public Spielflaeche spielflaeche = new Spielflaeche(fenster);
 	public Spieler spieler; //import aus shared.spieler, welcher alle Merkmale des Charakters beinhaltet
 		String benutzername, passwort;
-	HindiBones fenster;  //import von der gui; hier laeuft das Fenster des Spiels plus die Hauptschnittstelle des Clients drüber
+	//import von der gui; hier laeuft das Fenster des Spiels plus die Hauptschnittstelle des Clients drüber
 	public boolean eingeloggt = false;
 	public boolean login = false;
 	public boolean neuesLevel = false;
 
+	int levelzaehler = 0;
 
 	TestumgebungClientEngine testInstanz = new TestumgebungClientEngine();
 
@@ -44,9 +46,9 @@ public class ClientEngine extends Thread {
 	 *
 	 */
 
-	public void nachrichtentypZuordnen(String empfangenerString) {
+	/*public void nachrichtentypZuordnen(String empfangenerString) {
 
-		switch (nachrichtenVerarbeitung()) {             //Switch-Case Anweisung wird zur Unterscheidung eingehender Nachrichten verwendet
+		switch (empfangenerString) {             //Switch-Case Anweisung wird zur Unterscheidung eingehender Nachrichten verwendet
 			case 0:
 				//LOGIN
 				if (eingeloggt = true) {
@@ -89,7 +91,7 @@ public class ClientEngine extends Thread {
 				testInstanz.serverAntwort(empfangeneNachricht.fehler);
 				break;
 			case 6:
-				verarbeiteCheat(empfangeneNachricht);
+				verarbeiteCheat(empfangenerString);
 				break;
 			case 7: {
 				for (int i = 0; i < empfangeneNachricht.leveldaten.length; i++) {
@@ -97,7 +99,7 @@ public class ClientEngine extends Thread {
 				}
 			}
 		}
-	}
+	}*/
 
 /**
  * Methode verarbeiteCheat: Verarbeitet von Server empfangene Cheat-Nachricht (führt aus)
@@ -197,7 +199,7 @@ public class ClientEngine extends Thread {
 	 * @param nachricht
 	 * @return
 	 */
-	public boolean chatte(String nachricht) {
+	public void chatte(String nachricht) {
 		boolean cheat = verarbeiteCheat(nachricht);
 
 		if (cheat == false) {
@@ -234,43 +236,18 @@ public class ClientEngine extends Thread {
 	 * @param eingehendeNachricht
 	 * @throws Exception
 	 */
-	public void nachrichtenVerarbeitung(String eingehendeNachricht) throws Exception {
 
-		}
-		if (eingehendeNachricht instanceof LevelAendern) {
-			// Wechseln des Levels/Neues Spielfeld
-
-			testInstanz.neuesLevelAnfordern(levelNummer);
-
-		}
-
-		if (eingehendeNachricht instanceof LevelAendern) {
-			// Wechseln des neuen Levels/ Spielfelds
-
-			LevelAendern daten = (LevelAendern) eingehendeNachricht;
-			spielfeld.breite = konstante.WIDTH;
-			spielfeld.hoehe = konstante.HEIGHT;
-			while (!monsterListe.isEmpty()) {
-				monsterListe.remove();
-			}
-
-			spielflaeche.levelzaehler = daten.levelzaehler;
-			this.neuesLevel = true;
-			System.out.println("Neues Level gespeichert");
-
-
-		}
-		if (eingehendeNachricht instanceof SpielerBewegung) {
+		/*if (eingehendeNachricht instanceof SpielerBewegung) {
 			// Spieler-Bewegung
 
 			System.out.println("Neue Position");
 			SpielerBewegung daten = (SpielerBewegung) eingehendeNachricht;
 			this.spieler.setPos(daten.neuXPos, daten.neuYPos);
 		}
-	}
+	}*/
 
 
-	public void spielerBewegen(int richtung) {
+	/*public void spielerBewegen(int richtung) {
 
 		//Parameter für Konsistenzcheck benoetigt: Abmessungen des Spielfeldes
 		//Hier if check einfügen
@@ -279,61 +256,69 @@ public class ClientEngine extends Thread {
 
 
 
+		int aktuellesLevelWidth = fenster.WIDTH;
+		int aktuellesLevelHeight = fenster.HEIGHT;
+
 
 		spieler = fenster.spieler;
 		switch (richtung) {
 			case 0:
-			/*
+			*//*
 			 * Testet, ob eine Bewegung in die angegebene Richtung moeglich ist.
 			 * Fuehrt die Bewegung aus und sendet eine entsprechende Nachricht
 			 * an den Server
-			 */
-				if (spieler.getYPos() < aktuellesLevel.getLaengeY() - 1
-						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() + 1) != 0) {
+			 *//*
+				if (spieler.getYPos() < aktuellesLevelWidth - 1
+						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() + 1) != 0)
+
+				{
 					spieler.runter();
-					sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+					testInstanz.serverAntwort("spielerXPos: " + spieler.getXPos() + " SpielerYPos: " + spieler.getYPos());//Hier bei bedarf spielerID einfuegen
 				}
 				break;
 
 			case 1:
-			/*
+			*//*
 			 * Analog zu case 0
-			 */
+			 *//*
 				if (spieler.getYPos() > 0
-						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() - 1) != 0) {
+						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() - 1) != 0)
+				{
 					spieler.hoch();
-					sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+					testInstanz.serverAntwort("spielerXPos: " + spieler.getXPos() + " SpielerYPos: " + spieler.getYPos());//Hier bei bedarf spielerID einfuegen
 				}
 				break;
 
 			case 2:
-			/*
+			*//*
 			 * Analog zu case 0
-			 */
+			 *//*
 				if (spieler.getXPos() > 0
-						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() - 1, spieler.getYPos()) != 0) {
+						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() - 1, spieler.getYPos()) != 0)
+				{
 					spieler.links();
-					sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+					testInstanz.serverAntwort("spielerXPos: " + spieler.getXPos() + " SpielerYPos: " + spieler.getYPos());//Hier bei bedarf spielerID einfuegen
 				}
 				break;
 
 			case 3:
-			/*
+			*//*
 			 * Analog zu case 0
-			 */
-				if (spieler.getXPos() < aktuellesLevel.getLaengeX() - 1
-						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() + 1, spieler.getYPos()) != 0) {
+			 *//*
+				if (spieler.getXPos() < aktuellesLevelHeight - 1
+						&& fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() + 1, spieler.getYPos()) != 0)
+				{
 					spieler.rechts();
-					sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+					testInstanz.serverAntwort("spielerXPos: " + spieler.getXPos() + " SpielerYPos: " + spieler.getYPos());//Hier bei bedarf spielerID einfuegen
 				}
 				break;
 
 		}
-	}
+	}*/
 
 
 
-	}
+	//}
 
 
 }
