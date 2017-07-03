@@ -5,6 +5,7 @@ import datenstruktur.Spieler;
 import gui.HindiBones;
 import gui.Spielflaeche;
 import shared.nachrichten.*;
+import datenstruktur.Heiltrank;
 import datenstruktur.*;
 import gui.*;
 
@@ -14,6 +15,14 @@ import gui.*;
  * @author Pilz, Konstantin, 5957451
  *
  */
+
+/*
+*
+* itemID = 0: Heiltrank
+* itemID = 1: Schluessel
+*
+* */
+
 public class ClientEngine extends Thread {
 
 	public Spielflaeche spielflaeche = new Spielflaeche();
@@ -101,18 +110,19 @@ public class ClientEngine extends Thread {
  * @param cheat: Zu verarbeitende Nachricht, welche dem Spiele Vorteile bringen sollen
  *
  */
-	public void verarbeiteCheat(String cheat){
+	public boolean verarbeiteCheat(String cheat){
 
 		if (cheat == "<#godmode") {
 			testInstanz.serverAntwort(0);
-
+			return true;
 		}
 		if (cheat == "<#nebelWeg") {
 			testInstanz.serverAntwort(1);
+			return true;
 		}
 		else {
 			System.out.println("Error! Ungültiger Cheat!");
-
+			return false;
 		}
 	}
 
@@ -132,15 +142,6 @@ public class ClientEngine extends Thread {
 		testInstanz.serverAntwort();
     }
 
-	/**
-	 * Methode sende: Diese Methode schickt ein Paket mit einer Nachricht an den Server
-	 * @param nachricht
-	 * @return
-	 */
-	public Paket sende(NachrichtMain nachricht) {
-		return socket.anServerSenden(new Paket(nachricht));
-	}
-
     /**
      * Methode nimmHeiltrank: In dieser Methode kann der Spieler an einer bestimmten Position einen Trank aufnehmen.
 	 * Nachricht an Server bestaetigt, ob an dieser Stelle an Item liegt und welche Art Item und aendert nach Aufnahme
@@ -149,8 +150,14 @@ public class ClientEngine extends Thread {
      */
 	public void nimmHeiltrank(){
 		spieler = fenster.spieler;
-		spieler.nimmHeiltrank();  //aufnehmenHeiltrank ist in Shared.Spieler eine Methode und muss noch erstellt werden
-		anServerSenden(new Itemnachricht(spieler.getXPos(), spieler.getYPos(),2));  //ItemNachricht in Shared mit (XPos, YPos, 2 = Art des Items)
+		Heiltrank heilgetraenk = new Heiltrank(20);
+		spieler.nimmHeiltrank(heilgetraenk);
+
+		int posX = spieler.getXPos();
+		int posY = spieler.getYPos();
+		int itemIDlocal = 0;
+
+		testInstanz.serverAntwort(posX, posY, itemIDlocal);
 	}
 
 	/**
@@ -160,7 +167,13 @@ public class ClientEngine extends Thread {
     public void aufnehmenSchluessel(){
     	spieler = fenster.spieler;
     	spieler.nimmSchluessel();
-    	anServerSenden(new Itemnachricht(spieler.getXPos(), spieler.getYPos(),1)); //1 = Art des Items
+
+
+		int posX = spieler.getXPos();
+		int posY = spieler.getYPos();
+		int itemIDlocal = 1;
+
+		testInstanz.serverAntwort(posX, posY, itemIDlocal);
 	}
 
     /**
@@ -196,18 +209,12 @@ public class ClientEngine extends Thread {
 	 * @param nachricht
 	 * @return
 	 */
-	public boolean chatte(Chatnachricht nachricht) {
-		Paket serverAntwort = new Paket(new Fehlernachricht("Konnte keine Nachricht senden!"));
-		// Wenn die Chatnachricht ein Cheat ist, wird dieser ausgefuehrt
-		if (nachricht.istCheat()) {
-			serverAntwort = sende(new Cheat(nachricht.getCheattyp()));
-		} else {						// Wenn kein Cheat, dann wird die Nachricht als Chatnachricht weiterverarbeitet
-			serverAntwort = sende(nachricht);
-		}
-		// Verarbeitet die Serverantwort
-		nachrichtentypZuordnen(serverAntwort);
+	public boolean chatte(String nachricht) {
+		boolean cheat = verarbeiteCheat(nachricht)
 
-		return serverAntwort.getNachricht().gueltig;
+		if (cheat == false) {
+			testInstanz.serverAntwort();
+		}
 	}
 
 	/**

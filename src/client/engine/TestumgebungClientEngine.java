@@ -83,4 +83,10 @@ public class TestumgebungClientEngine {
         System.out.println(nachrichtenBotschaft);
     }
 
+    public void serverAntwort(int positionX, int positionY, int itemID) {
+        //Server handling/engine hier implementieren!!
+
+        System.out.println("PositionX: " + positionX + " PositionY: " + positionY + " itemID: " + itemID);
+    }
+
 }
