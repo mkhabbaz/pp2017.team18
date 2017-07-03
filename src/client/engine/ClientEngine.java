@@ -122,17 +122,6 @@ public class ClientEngine extends Thread {
 		}
 	}
 
-
-    /**
-     * Methode levelAnfordern: Empfaengt die Serverdaten des Levels
-     * @author Pilz, Konstantin, 5957451
-     *
-     */
-    
-    public Spielflaeche levelAnfordern(int levelNummer){
-		return testInstanz.neuesLevelAnfordern(levelNummer);
-    }
-
     /**
      * Methode nimmHeiltrank: In dieser Methode kann der Spieler an einer bestimmten Position einen Trank aufnehmen.
 	 * Nachricht an Server bestaetigt, ob an dieser Stelle an Item liegt und welche Art Item und aendert nach Aufnahme
@@ -245,31 +234,19 @@ public class ClientEngine extends Thread {
 	 * @param eingehendeNachricht
 	 * @throws Exception
 	 */
-	public int nachrichtenVerarbeitung(String eingehendeNachricht)
-			throws Exception {
-		// Login
-		if (eingehendeNachricht instanceof LoginAntwort) {
-			LoginAntwort daten = (LoginAntwort) eingehendeNachricht;
-			spielflaeche.level = daten.karte;
-			spielflaeche.levelzaehler = daten.levelzaehler;
-			spieler.setName(daten.name);
-			spieler.setPasswort(daten.passwort);
-			this.eingeloggt = daten.eingeloggt;
+	public void nachrichtenVerarbeitung(String eingehendeNachricht) throws Exception {
 
-			System.out.println("Login empfangen");
-
-			this.login = true;
-
+		}
+		if (eingehendeNachricht instanceof LevelAendern) {
 			// Wechseln des Levels/Neues Spielfeld
-		} else if (eingehendeNachricht instanceof LevelAendern) {
-			LevelAendern daten = (LevelAendern) eingehendeNachricht;
-			spielflaeche.breite = konstante.WIDTH;
-			spielflaeche.hoehe = konstante.HEIGHT;
-			while (!monsterListe.isEmpty()) {
-				monsterListe.remove();
-			}
+
+			testInstanz.neuesLevelAnfordern(levelNummer);
+
+		}
+
+		if (eingehendeNachricht instanceof LevelAendern) {
 			// Wechseln des neuen Levels/ Spielfelds
-		} else if (eingehendeNachricht instanceof LevelAendern) {
+
 			LevelAendern daten = (LevelAendern) eingehendeNachricht;
 			spielfeld.breite = konstante.WIDTH;
 			spielfeld.hoehe = konstante.HEIGHT;
@@ -281,12 +258,25 @@ public class ClientEngine extends Thread {
 			this.neuesLevel = true;
 			System.out.println("Neues Level gespeichert");
 
+
+		}
+		if (eingehendeNachricht instanceof SpielerBewegung) {
 			// Spieler-Bewegung
-		} else if (eingehendeNachricht instanceof SpielerBewegung) {
+
 			System.out.println("Neue Position");
 			SpielerBewegung daten = (SpielerBewegung) eingehendeNachricht;
 			this.spieler.setPos(daten.neuXPos, daten.neuYPos);
 		}
 	}
+
+
+	public void spielerBewegen(int neuPosX, int neuPosY) {
+
+		//Parameter für Konsistenzcheck benoetigt: Abmessungen des Spielfeldes
+		//Hier if check einfügen
+
+		spieler.setPos(neuPosX, neuPosY);
+	}
+
 
 }

@@ -95,13 +95,12 @@ public class TestumgebungClientEngine {
 
 
 
-    public Spielflaeche neuesLevelAnfordern(int levelNummer) {
+    public void neuesLevelAnfordern(int levelNummer) {
 
         //Eigentlich auf dem Server ausführen
         HindiBones hindiObjekt = new HindiBones(110, 110, "Hindi");
         Spielflaeche spfla = new Spielflaeche(hindiObjekt);
 
-        return spfla;
 
     }
 }
