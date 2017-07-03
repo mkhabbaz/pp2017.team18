@@ -105,24 +105,6 @@ public class TestumgebungClientEngine {
     }
 
 
-
-    public Level levelWechseln() {
-        // Wenn das Level nicht das letzte war, wird das Level um eins erhoeht.
-        if (fenster.level.getLevelID() < fenster.MAXLEVEL - 1) {
-            aktuellesLevel = alleLevel[aktuellesLevel.levelID + 1];
-            // Dem Spieler wird der Schluessel abgenommen
-            fenster.spieler.entferneSchluessel();
-            fenster.levelnummer = aktuellesLevel.levelID;
-            systemnachricht("Level wurde gewechselt!");
-            return aktuellesLevel;
-        } else {
-            // Wenn es das letzte Level war, wird ein Level mit ID = 6
-            // zurueckgegeben, damit
-            return new Level(6, aktuellesLevel.levelInhalt);
-        }
-    }
-
-
     public void spielerBewegung(int richtung) {
         spieler = fenster.spieler;
         switch (richtung) {
