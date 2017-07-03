@@ -103,4 +103,76 @@ public class TestumgebungClientEngine {
 
 
     }
+
+
+
+    public Level levelWechseln() {
+        // Wenn das Level nicht das letzte war, wird das Level um eins erhoeht.
+        if (fenster.level.getLevelID() < fenster.MAXLEVEL - 1) {
+            aktuellesLevel = alleLevel[aktuellesLevel.levelID + 1];
+            // Dem Spieler wird der Schluessel abgenommen
+            fenster.spieler.entferneSchluessel();
+            fenster.levelnummer = aktuellesLevel.levelID;
+            systemnachricht("Level wurde gewechselt!");
+            return aktuellesLevel;
+        } else {
+            // Wenn es das letzte Level war, wird ein Level mit ID = 6
+            // zurueckgegeben, damit
+            return new Level(6, aktuellesLevel.levelInhalt);
+        }
+    }
+
+
+    public void spielerBewegung(int richtung) {
+        spieler = fenster.spieler;
+        switch (richtung) {
+            case 0:
+			/*
+			 * Testet, ob eine Bewegung in die angegebene Richtung moeglich ist.
+			 * Fuehrt die Bewegung aus und sendet eine entsprechende Nachricht
+			 * an den Server
+			 */
+                if (spieler.getYPos() < aktuellesLevel.getLaengeY() - 1
+                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() + 1) != 0) {
+                    spieler.runter();
+                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+                }
+                break;
+
+            case 1:
+			/*
+			 * Analog zu case 0
+			 */
+                if (spieler.getYPos() > 0
+                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos(), spieler.getYPos() - 1) != 0) {
+                    spieler.hoch();
+                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+                }
+                break;
+
+            case 2:
+			/*
+			 * Analog zu case 0
+			 */
+                if (spieler.getXPos() > 0
+                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() - 1, spieler.getYPos()) != 0) {
+                    spieler.links();
+                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+                }
+                break;
+
+            case 3:
+			/*
+			 * Analog zu case 0
+			 */
+                if (spieler.getXPos() < aktuellesLevel.getLaengeX() - 1
+                        && fenster.level.getBestimmtenLevelInhalt(spieler.getXPos() + 1, spieler.getYPos()) != 0) {
+                    spieler.rechts();
+                    sende(new BewegungsNachricht(spieler.getID(), spieler.getXPos(), spieler.getYPos()));
+                }
+                break;
+
+        }
+    }
+
 }
