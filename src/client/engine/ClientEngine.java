@@ -25,6 +25,8 @@ public class ClientEngine extends Thread {
 	public boolean neuesLevel = false;
 
 
+	TestumgebungClientEngine testInstanz = new TestumgebungClientEngine();
+
 	/**
 	 * Methode nachrichtentypZuordnen: Verarbeitet die vom Server an Client versendete Nachricht
 	 * je nach enthaltenem Nachrichtentyp
@@ -38,13 +40,15 @@ public class ClientEngine extends Thread {
 		switch (empfangeneNachricht.getNachrichtentyp()) {             //Switch-Case Anweisung wird zur Unterscheidung eingehender Nachrichten verwendet
 			case 0://LOGIN
 				if (eingeloggt = true) {
-					LoginAntwort daten = (LoginAntwort) eingehendeNachricht;
+					LoginAntwort daten = new LoginAntwort(true) ; //eingehendeNachricht
 					spielflaeche.level = daten.karte;
 					spielflaeche.levelzaehler = daten.levelzaehler;
 					spieler.setName(daten.name);
 					spieler.setPasswort(daten.passwort);
 					this.eingeloggt = daten.eingeloggt;
-					System.out.println("Login wurde erfolgreich empfangen");
+					testInstanz.gibAntwortWeiter("Login wurde erfolgreich empfangen");
+
+					testInstanz.serverAntwort(0);
 					this.login = true;
 				}
 				break;
@@ -60,19 +64,23 @@ public class ClientEngine extends Thread {
 				return serverAntwort.getNachricht().gueltig; //gueltig muss noch unter shared erstellt werden, dass Daten gueltig ist
 				systemnachricht("Position des Spielers: " + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos());
 				break;
-			case 2://
-				systemnachricht("Trank an " + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
+			case 2:
+				//
+				testInstanz.gibAntwortWeiter("Trank an " + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
 						+ " wurde aufgenommen");
 				break;
 			case 3:
-				systemnachricht("Schluessel an" + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
+				//
+				testInstanz.gibAntwortWeiter("Schluessel an" + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
 						+ " wurde aufgenommen");
 				break;
 			case 4:
+				//
 				systemnachricht("Das Level wurde abgeschlossen!");
 
 				break;
 			case 5:
+				//
 				systemnachricht(empfangeneNachricht.fehler);
 				break;
 			case 6:
@@ -97,6 +105,8 @@ public class ClientEngine extends Thread {
 		switch (cheat.cheattyp){
 			case 0:
 				systemnachricht("Error! Ungueltiger Cheat!");
+
+
 				break;
 			case 1:
 				fenster.nebelAn = false;
@@ -120,6 +130,8 @@ public class ClientEngine extends Thread {
         nachrichtentypZuordnen(serverAntwort);  //mit dieser Methode aus ClienEngine wird der Antwort ein Nachrichtentyp
 												// zugeordnet
         currentLevel = alleLevel[0];  //hier wird das aktuelle Level als Startlevel gesetzt
+
+		testInstanz.serverAntwort();
     }
 
 	/**

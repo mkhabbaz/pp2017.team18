@@ -24,14 +24,14 @@ public class NachrichtMain implements Serializable {
      * @param nachrichtentyp: Je nach Nachrichtentyp wird die Nachricht anders behandelt. Typ wird je nach Ereignis
      *                      der Nachricht zugewiesen.
      * Nachrichtentypen:
-     * 1: Fehlernachricht, uebergibt Fehlermeldung als Text
-     * 2: Cheat:
-     * 3: Antwort: Gibt Boolean-Werte auf Anfragen zurueck
-     * 4: LevelAendern:
-     * 5: Login Nachricht:
-     * 6: SpielerBewegung:
+     * 0: Fehlernachricht, uebergibt Fehlermeldung als Text
+     * 1: Cheat:
+     * 2: Antwort: Gibt Boolean-Werte auf Anfragen zurueck
+     * 3: LevelAendern:
+     * 4: Login Nachricht:
+     * 5: SpielerBewegung:
+     * 6:
      * 7:
-     * 8:
      * @author Pilz, Konstantin, 5957451
      *
      */

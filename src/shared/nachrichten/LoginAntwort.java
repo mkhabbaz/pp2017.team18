@@ -16,7 +16,7 @@ public class LoginAntwort extends NachrichtMain {
 
 
     public LoginAntwort(boolean loginAntwort) {
-        super(5);
+        super(4);
         this.eingeloggt = loginAntwort;
     }
 }
