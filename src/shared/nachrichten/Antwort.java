@@ -1,6 +1,6 @@
 package shared.nachrichten;
 
-import shared.NachrichtMain;
+import shared.nachrichten.NachrichtMain;
 
 /**
  * Klasse Antwort:

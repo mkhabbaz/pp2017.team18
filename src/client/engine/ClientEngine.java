@@ -66,7 +66,7 @@ public class ClientEngine extends Thread {
 				break;
 			case 2:
 				//
-				testInstanz.gibAntwortWeiter("Trank an " + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
+				testInstanz.serverAntwort("Trank an " + empfangeneNachricht.getXPos() + ", " + empfangeneNachricht.getYPos()
 						+ " wurde aufgenommen");
 				break;
 			case 3:
@@ -112,20 +112,6 @@ public class ClientEngine extends Thread {
 		}
 		else {
 			System.out.println("Error! Ungültiger Cheat!");
-		}
-
-
-
-
-
-		switch (cheat.cheattyp){
-
-			case 1:
-				fenster.nebelAn = false;
-				systemnachricht("Nebel weg!");
-				break;
-			case 2:
-				//weitere Cheats mit Spielweltverwaltung absprechen
 
 		}
 	}
