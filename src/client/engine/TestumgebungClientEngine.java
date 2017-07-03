@@ -1,46 +1,84 @@
 package client.engine;
 
+import gui.HindiBones;
+
 /**
  * Created by konstantinpilz on 03.07.17.
  */
 public class TestumgebungClientEngine {
 
-    public void gibAntwortWeiter(String antwort) {
+    HindiBones fenster;
+
+    public void serverAntwort(String antwort) {
         System.out.println(antwort);
     }
 
-    public void serverAntwort(int nachrichtenTyp) {
+    public void serverAntwort(int antwort) {
+        System.out.println("" + antwort);
+
+        switch (antwort) {
+            case 0:
+                //godmode cheat aktiviert
+                System.out.println("godmode Cheat wurde erfolgreich eingesetzt");
+                break;
+
+            case 1:
+                //nebelWeg cheat aktiviert
+                System.out.println("nebelWeg Cheat wurde erfolgreich eingesetzt");
+                fenster.nebelAn = false;
+                break;
+
+
+        }
+
+    }
+
+    public void serverAntwort(int nachrichtenTyp, String nachrichtenInhalt) {
         System.out.println("Neues Level erstellt");
 
         String nachrichtenBotschaft = "Warnung: Undefinierter String";
         switch (nachrichtenTyp) {
             case 0:
                 //Fehlernachricht, uebergibt Fehlermeldung als Text
-                nachrichtenBotschaft = "Fehlernachricht, uebergibt Fehlermeldung als Text";
+                nachrichtenBotschaft = "Fehlernachricht, übergibt Fehlermeldung als Text";
+
+                break;
 
             case 1:
                 //Cheat
-                nachrichtenBotschaft = "Cheat";
+                nachrichtenBotschaft = "Cheat: " + nachrichtenInhalt;
+
+                break;
 
             case 2:
                 //Antwort: Gibt Boolean-Werte auf Anfragen zurueck
                 nachrichtenBotschaft = "Antwort: Gibt Boolean-Werte auf Anfragen zurueck";
 
+                break;
+
             case 3:
                 //LevelAendern
-                nachrichtenBotschaft = "LevelAendern";
+                nachrichtenBotschaft = "LevelAendern: " + nachrichtenInhalt;
+
+                break;
 
             case 4:
                 //Login Nachricht
-                nachrichtenBotschaft = "Login Nachricht";
+                nachrichtenBotschaft = "Login Nachricht: " + nachrichtenInhalt;
+
+                break;
 
             case 5:
                 //SpielerBewegung
-                nachrichtenBotschaft = "SpielerBewegung";
+                nachrichtenBotschaft = "SpielerBewegung: " + nachrichtenInhalt;
+
+                break;;
 
             case 6:
                 //
                 nachrichtenBotschaft = "";
+
+                break;
         }
         System.out.println(nachrichtenBotschaft);
     }

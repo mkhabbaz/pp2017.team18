@@ -101,13 +101,25 @@ public class ClientEngine extends Thread {
  * @param cheat: Zu verarbeitende Nachricht, welche dem Spiele Vorteile bringen sollen
  *
  */
-	public void verarbeiteCheat(NachrichtMain cheat){
+	public void verarbeiteCheat(String cheat){
+
+		if (cheat == "<#godmode") {
+			testInstanz.serverAntwort(0);
+
+		}
+		if (cheat == "<#nebelWeg") {
+			testInstanz.serverAntwort(1);
+		}
+		else {
+			System.out.println("Error! Ungültiger Cheat!");
+		}
+
+
+
+
+
 		switch (cheat.cheattyp){
-			case 0:
-				systemnachricht("Error! Ungueltiger Cheat!");
 
-
-				break;
 			case 1:
 				fenster.nebelAn = false;
 				systemnachricht("Nebel weg!");
@@ -215,7 +227,7 @@ public class ClientEngine extends Thread {
 	/**
 	 * Methode run: Fragt kontinuierlich während der Client geoeffnet ist, ob neue Nachrichten von Server kommen
 	 */
-	public void run() {
+	/*public void run() {
 		while (client.aktiv) {									//aktiv: ClientServer Verbindung aktiv?
 			NachrichtMain m = client.anClientWeitergeben();
 			if (m == null) {
@@ -234,7 +246,7 @@ public class ClientEngine extends Thread {
 			}
 		}
 		this.interrupt();
-	}
+	}*/
 
 	/**
 	 * Methode nachrichtenVerarbeitung:
@@ -251,7 +263,9 @@ public class ClientEngine extends Thread {
 			spieler.setName(daten.name);
 			spieler.setPasswort(daten.passwort);
 			this.eingeloggt = daten.eingeloggt;
+
 			System.out.println("Login empfangen");
+
 			this.login = true;
 
 			// Wechseln des Levels/Neues Spielfeld
