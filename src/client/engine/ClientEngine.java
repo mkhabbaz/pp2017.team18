@@ -41,7 +41,7 @@ public class ClientEngine extends Thread {
 	 * je nach enthaltenem Nachrichtentyp
 	 *
 	 * @author Pilz, Konstantin, 5957451
-	 * @param empfangenesPaket: Von Server empfangenes Paket, welches jetzt je nach Typ verarbeitet wird
+	 *
 	 */
 
 	public void nachrichtentypZuordnen(String empfangenerString) {
@@ -55,21 +55,15 @@ public class ClientEngine extends Thread {
 					spielflaeche.level = daten.karte;
 					spielflaeche.levelzaehler = daten.levelzaehler;
 					spieler.setName(daten.name);
-					spieler.setPasswort(daten.passwort);
-					this.eingeloggt = daten.eingeloggt;
-					testInstanz.gibAntwortWeiter("Login wurde erfolgreich empfangen");
 
-					testInstanz.serverAntwort(0);
+					//spieler.setPasswort(daten.passwort);
+					this.eingeloggt = daten.eingeloggt;
+
+					testInstanz.serverAntwort(4, "Login wurde erfolgreich empfangen");
 					this.login = true;
 				}
 				break;
 			case 1://anmelden
-				/** Methode anmelden: Versucht den Spieler mit zugehörigem Benutzernamen und Passwort anzumelden
-				 *
-				 * @author Pilz, Konstantin, 5957451
-				 * @param login: Loginnachricht, die an den Server gesendet wird
-				 * @return Antwort vom Server, ob Benutzer angemeldet/registriert wurde
-				 */
 				Paket serverAntwort = sende(login);
 				nachrichtentypZuordnen(serverAntwort);
 				return serverAntwort.getNachricht().gueltig; //gueltig muss noch unter shared erstellt werden, dass Daten gueltig ist
@@ -134,29 +128,9 @@ public class ClientEngine extends Thread {
      * @author Pilz, Konstantin, 5957451
      *
      */
-    public void levelAnfordern(){
-
-        Paket serverAntwort = sende(new LevelAendern());  //diese Nachricht muss noch in shared erstellt werden
-        nachrichtentypZuordnen(serverAntwort);  //mit dieser Methode aus ClienEngine wird der Antwort ein Nachrichtentyp
-												// zugeordnet
-        currentLevel = alleLevel[0];  //hier wird das aktuelle Level als Startlevel gesetzt
-
-		testInstanz.serverAntwort();
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    public Spielflaeche levelAnfordern(int levelNummer){
+		return testInstanz.neuesLevelAnfordern(levelNummer);
     }
 
     /**

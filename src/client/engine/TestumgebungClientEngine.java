@@ -1,6 +1,7 @@
 package client.engine;
 
 import gui.HindiBones;
+import gui.Spielflaeche;
 
 /**
  * Created by konstantinpilz on 03.07.17.
@@ -91,4 +92,16 @@ public class TestumgebungClientEngine {
         System.out.println("PositionX: " + positionX + " PositionY: " + positionY + " itemID: " + itemID);
     }
 
+
+
+
+    public Spielflaeche neuesLevelAnfordern(int levelNummer) {
+
+        //Eigentlich auf dem Server ausführen
+        HindiBones hindiObjekt = new HindiBones(110, 110, "Hindi");
+        Spielflaeche spfla = new Spielflaeche(hindiObjekt);
+
+        return spfla;
+
+    }
 }
