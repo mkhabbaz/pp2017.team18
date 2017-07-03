@@ -17,6 +17,9 @@ import datenstruktur.Spieler;
 import datenstruktur.Tuer;
 import datenstruktur.Wand;
 
+import client.engine.ClientEngine;
+import client.engine.TestumgebungClientEngine;
+
 public class HindiBones extends JFrame implements KeyListener {
 
 	private static final long serialVersionUID = 1L;
@@ -47,8 +50,20 @@ public class HindiBones extends JFrame implements KeyListener {
 	public final int BOX = 32;
 
 	public HindiBones(int width, int height, String title) {
+		ClientEngine cEngine = new ClientEngine();
+		TestumgebungClientEngine testClientEngine = new TestumgebungClientEngine();
+
+		cEngine.chatte("<#godmode");
+		cEngine.chatte("Hallo");
+
+		testClientEngine.serverAntwort(0, "Die Hindi Bones brennen");
+		System.out.println("Hallo Test");
+		System.out.flush();
+
+
 		initialisiereJFrame(width, height, title);
 		starteNeuesSpiel();
+
 	}
 
 	public void initialisiereJFrame(int width, int height, String title) {
@@ -156,10 +171,10 @@ public class HindiBones extends JFrame implements KeyListener {
 				Monster m = spieler.angriffsMonster();
 				if (m != null)
 					m.changeHealth(-BOX / 4);
-			// B für 'Heiltrank benutzen'
+			// B fï¿½r 'Heiltrank benutzen'
 			} else if (e.getKeyCode() == KeyEvent.VK_B){
 				int change = spieler.benutzeHeiltrank();
-				// Heilungseffekt wird verbessert, falls neue Monster durch das Aufheben des Schlüssels ausgelöst wurden
+				// Heilungseffekt wird verbessert, falls neue Monster durch das Aufheben des Schlï¿½ssels ausgelï¿½st wurden
 				if (spieler.hatSchluessel())
 					spieler.changeHealth((int)(change*1.5));
 				else

@@ -1,4 +1,5 @@
 import client.engine.ClientEngine;
+import client.engine.TestumgebungClientEngine;
 import gui.HindiBones;
 
 public class HindiBonesMain {
@@ -11,8 +12,14 @@ public class HindiBonesMain {
 		new HindiBones(BOX*WIDTH, BOX*HEIGHT, "Hindi Bones");
 
 		ClientEngine cEngine = new ClientEngine();
+		TestumgebungClientEngine testClientEngine = new TestumgebungClientEngine();
+
 		cEngine.chatte("<#godmode");
 		cEngine.chatte("Hallo");
+
+		testClientEngine.serverAntwort(0, "Die Hindi Bones brennen");
 		System.out.println("Hallo Test");
+		System.out.flush();
+
 	}
 }
